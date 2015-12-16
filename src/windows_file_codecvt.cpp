@@ -17,7 +17,6 @@
 # define BOOST_SYSTEM_NO_DEPRECATED
 #endif
 
-#include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/config.hpp>
 #include <cwchar>  // for mbstate_t
 
@@ -37,12 +36,7 @@
     const char* from, const char* from_end, const char*& from_next,
     wchar_t* to, wchar_t* to_end, wchar_t*& to_next) const
   {
-#if BOOST_PLAT_WINDOWS_RUNTIME
-	  // AreFileApisANSI() not supported
-	  UINT codepage = CP_ACP;
-#else
     UINT codepage = AreFileApisANSI() ? CP_ACP : CP_OEMCP;
-#endif	/* BOOST_PLAT_WINDOWS_RUNTIME */
 
     int count;
     if ((count = ::MultiByteToWideChar(codepage, MB_PRECOMPOSED, from,
@@ -62,12 +56,7 @@
     const wchar_t* from, const wchar_t* from_end, const wchar_t*  & from_next,
     char* to, char* to_end, char* & to_next) const
   {
-#if BOOST_PLAT_WINDOWS_RUNTIME
-	// AreFileApisANSI() not supported
-	UINT codepage = CP_ACP;
-#else
     UINT codepage = AreFileApisANSI() ? CP_ACP : CP_OEMCP;
-#endif	/* BOOST_PLAT_WINDOWS_RUNTIME */
 
     int count;
     if ((count = ::WideCharToMultiByte(codepage, WC_NO_BEST_FIT_CHARS, from,
